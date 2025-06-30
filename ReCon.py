@@ -14,6 +14,9 @@ SUPPORTED_EXTS = ('.jpg', '.jpeg', '.png', '.bmp', '.webp', '.tiff', '.heic', '.
 st.set_page_config(page_title="Фото-бот: Переименование и конвертация", page_icon="🖼️")
 st.title("🖼️ Фото-бот: Переименование и конвертация")
 
+if "reset_uploader" not in st.session_state:
+    st.session_state.reset_uploader = 0
+
 mode = st.radio(
     "Выберите режим работы:",
     ["Переименование фото", "Конвертация в JPG"]
@@ -28,10 +31,21 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
+def reset_state():
+    st.session_state.log = []
+    st.session_state.result_zip = None
+    st.session_state.stats = {}
+
+if st.button("🔄 Начать сначала", type="primary"):
+    reset_state()
+    st.session_state.reset_uploader += 1
+    st.experimental_rerun()
+
 uploaded_files = st.file_uploader(
     "Загрузите изображения или zip-архив (до 200 МБ)",
     type=["jpg", "jpeg", "png", "bmp", "webp", "tiff", "heic", "heif", "zip"],
-    accept_multiple_files=True
+    accept_multiple_files=True,
+    key=st.session_state.reset_uploader
 )
 
 if "log" not in st.session_state:
@@ -39,11 +53,6 @@ if "log" not in st.session_state:
 if "result_zip" not in st.session_state:
     st.session_state.result_zip = None
 if "stats" not in st.session_state:
-    st.session_state.stats = {}
-
-def reset_state():
-    st.session_state.log = []
-    st.session_state.result_zip = None
     st.session_state.stats = {}
 
 if st.button("Сбросить", type="primary"):
@@ -209,4 +218,4 @@ if st.session_state.result_zip:
             mime="application/zip"
         )
     with st.expander("Показать лог обработки"):
-        st.text_area("Лог:", value="\n".join(st.session_state.log), height=300, disabled=True)
+        st.text_area("Лог:", value="\n".join(st.session_state.log), height=300, disabled=True) 
