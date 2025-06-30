@@ -39,7 +39,7 @@ def reset_state():
 if st.button("🔄 Начать сначала", type="primary"):
     reset_state()
     st.session_state.reset_uploader += 1
-    st.experimental_rerun()
+    st.rerun()
 
 uploaded_files = st.file_uploader(
     "Загрузите изображения или zip-архив (до 200 МБ)",
