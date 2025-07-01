@@ -66,7 +66,7 @@ uploaded_files = st.file_uploader(
     key=st.session_state["reset_uploader"]
 )
 
-if uploaded_files:
+if uploaded_files and not st.session_state["result_zip"]:
     with st.spinner("Обработка файлов..."):
         with tempfile.TemporaryDirectory() as temp_dir:
             all_images = []
@@ -193,4 +193,4 @@ if st.session_state["result_zip"]:
             mime="application/zip"
         )
     with st.expander("Показать лог обработки"):
-        st.text_area("Лог:", value="\n".join(st.session_state["log"]), height=300, disabled=True) 
+        st.text_area("Лог:", value="\n".join(st.session_state["log"]), height=300, disabled=True)
